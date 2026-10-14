@@ -10,7 +10,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- html2canvas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -822,19 +822,25 @@
                 document.getElementById('stick-explain').innerText = randomStick.explain;
             }, 800);
         }
+function savePoster() {
+    const area = document.getElementById('poster-area');
 
-        function savePoster() {
-            const area = document.getElementById('poster-area');
-            html2canvas(area, { backgroundColor: '#0a0a0f', scale: 2, useCORS: true }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `2027财富指数测评_${userData.name}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                alert("海报生成失败，请长按屏幕截图保存！");
-            });
-        }
+    // 【新增检查行】如果插件未加载成功，提醒用户并终止
+    if (typeof html2canvas === 'undefined') {
+        alert("海报生成插件加载中或被拦截，请稍后再试，或直接长按屏幕截图保存！");
+        return;
+    }
 
+    html2canvas(area, { backgroundColor: '#0a0a0f', scale: 2, useCORS: true }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `2027财富指数测评_${userData.name}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }).catch(err => {
+        // 【新增捕获行】防止截图中出现意外错误时没有任何提示
+        alert("海报生成失败，请直接长按屏幕截图保存！");
+    });
+}
         function shareTest() {
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(window.location.href);
